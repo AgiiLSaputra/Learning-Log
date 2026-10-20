@@ -1,0 +1,155 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---- Latar belakang: bersih, tanpa dinding pastel ---- */
+body {
+  background-color: #ffffff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  min-height: 100vh;
+  color: #111116;
+  margin: 0;
+}
+
+/* Kartu efek kaca halus */
+.glass-card-subtle {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+.glass-card-cloud {
+  background: rgba(246, 247, 252, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Badge outline tipis */
+.pill-outline {
+  border: 1.5px solid #d8d9e0;
+  border-radius: 999px;
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+
+/* Fokus keyboard yang jelas namun tidak mengubah bahasa visual */
+:focus-visible {
+  outline: 2px solid #262634;
+  outline-offset: 2px;
+}
+
+/* Input & textarea ala Dashboard.html (pill lembut abu) */
+@layer components {
+  .input-base {
+    @apply border-none bg-[#F4F4F9] px-4 py-2 text-sm text-charcoal font-medium placeholder-muted rounded-full focus:outline-none focus:ring-2 focus:ring-onyx/20 transition-all;
+  }
+  .input-no-auto-pad {
+    @apply rounded-2xl;
+  }
+  .pill-select {
+    @apply border-none bg-[#F4F4F9] px-3.5 py-2 text-xs text-charcoal font-semibold rounded-full focus:outline-none focus:ring-2 focus:ring-onyx/20 transition-all cursor-pointer;
+  }
+}
+
+/* Scrollbar tipis ala entri.html */
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: #d8d9e0;
+  border-radius: 999px;
+}
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: #b0b2c0;
+}
+.custom-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #d8d9e0 transparent;
+}
+
+/* ===== Animasi halaman & reveal saat scroll ===== */
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.page-enter {
+  animation: pageIn 0.45s cubic-bezier(0.22, 0.68, 0.34, 1) both;
+}
+
+/* Kartu tersembunyi dulu, muncul ketika terlihat (scroll) */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s cubic-bezier(0.22, 0.68, 0.34, 1);
+}
+.reveal-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Sheet/POS modal naik dari bawah (mobile) atau pop halus (desktop) */
+@keyframes sheetRise {
+  from {
+    transform: translateY(32px);
+    opacity: 0.5;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.sheet-enter {
+  animation: sheetRise 0.38s cubic-bezier(0.22, 0.68, 0.34, 1) both;
+}
+@media (min-width: 768px) {
+  .sheet-enter {
+    animation-name: modalPop;
+  }
+}
+.backdrop-enter {
+  animation: fadeIn 0.3s ease both;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Hormati preferensi pengguna yang mengurangi gerakan */
+@media (prefers-reduced-motion: reduce) {
+  .page-enter,
+  .sheet-enter,
+  .backdrop-enter {
+    animation: none;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
